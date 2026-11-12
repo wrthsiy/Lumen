@@ -16,10 +16,10 @@
   // Last row holds the special keys; "␣" is a space.
   const SPECIAL = ["␣", "⌫", "OK"];
   const rows = [
-    "АБВГДЕЁЖЗИЙКЛМНОП".split(""),
-    "РСТУФХЦЧШЩЪЫЬЭЮЯ".split(""),
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
-    "0123456789-:'".split(""),
+    "1234567890".split(""),
+    "QWERTYUIOP".split(""),
+    "ASDFGHJKL'".split(""),
+    "ZXCVBNM-:.".split(""),
     SPECIAL,
   ];
   let r = $state(0);

@@ -24,12 +24,12 @@
         entries.update((arr) => [...arr, entry]);
         ok++;
       } catch (e) {
-        addToast(`Не удалось добавить ${p}: ${e}`, "error", 5000);
+        addToast(`Couldn't add ${p}: ${e}`, "error", 5000);
       } finally {
         busy--;
       }
     }
-    if (ok) addToast(ok === 1 ? "Добавлено" : `Добавлено: ${ok}`, "success");
+    if (ok) addToast(ok === 1 ? "Added" : `Added ${ok} items`, "success");
   }
 
   onMount(() => {
@@ -55,13 +55,13 @@
   }
 
   async function remove(id: string, name: string) {
-    if (!confirm(`Удалить «${name}» из библиотеки? Файлы игры не затрагиваются.`)) return;
+    if (!confirm(`Remove “${name}” from the library? Game files are not touched.`)) return;
     try {
       await api.deleteEntry(id);
       entries.update((arr) => arr.filter((e) => e.id !== id));
       selectedIdx = Math.min(selectedIdx, Math.max(0, list.length - 1));
     } catch (e) {
-      addToast(`Ошибка удаления: ${e}`, "error");
+      addToast(`Failed to delete: ${e}`, "error");
     }
   }
 </script>
@@ -70,13 +70,13 @@
   <header>
     <button onclick={() => goto("/")}>← Back</button>
     <h1>Library</h1>
-    <input class="filter" placeholder="Фильтр..." bind:value={filter} />
-    <button onclick={addFile} disabled={busy > 0}>{busy > 0 ? `Добавление… (${busy})` : "+ Add"}</button>
+    <input class="filter" placeholder="Filter..." bind:value={filter} />
+    <button onclick={addFile} disabled={busy > 0}>{busy > 0 ? `Adding… (${busy})` : "+ Add"}</button>
     <button onclick={() => goto("/settings")}>Settings</button>
     <button onclick={() => goto("/theme")}>Theme</button>
   </header>
 
-  <p class="hint">Перетащите сюда .exe, .lnk, .url или папку — либо нажмите «+ Add». Всего: {$entries.length}</p>
+  <p class="hint">Drop .exe, .lnk, .url files or folders here, or click “+ Add”. Total: {$entries.length}</p>
 
   <div class="list">
     {#each list as e, i (e.id)}
@@ -89,7 +89,7 @@
         <button onclick={() => remove(e.id, e.name)}>Delete</button>
       </div>
     {:else}
-      <p class="hint">{filter ? "Ничего не найдено." : "Библиотека пуста."}</p>
+      <p class="hint">{filter ? "Nothing found." : "The library is empty."}</p>
     {/each}
   </div>
 </div>

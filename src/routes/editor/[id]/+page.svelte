@@ -42,7 +42,7 @@
   async function save() {
     if (!entry) return;
     const e = $state.snapshot(entry) as Entry;
-    e.name = e.name.trim() || "Без названия";
+    e.name = e.name.trim() || "Untitled";
     // Empty optional fields should be null, not "".
     for (const k of ["track_process", "cover", "background", "video", "accent", "category"] as const) {
       const v = e[k];
@@ -51,22 +51,22 @@
     try {
       const saved = await api.saveEntry(e);
       entries.update((arr) => arr.map((x) => (x.id === saved.id ? saved : x)));
-      addToast("Сохранено", "success");
+      addToast("Saved", "success");
       goto("/library");
     } catch (err) {
-      addToast(`Ошибка сохранения: ${err}`, "error", 5000);
+      addToast(`Failed to save: ${err}`, "error", 5000);
     }
   }
 
   async function remove() {
-    if (!entry || !confirm(`Удалить «${entry.name}» из библиотеки?`)) return;
+    if (!entry || !confirm(`Remove “${entry.name}” from the library?`)) return;
     const eid = entry.id;
     try {
       await api.deleteEntry(eid);
       entries.update((arr) => arr.filter((x) => x.id !== eid));
       goto("/library");
     } catch (err) {
-      addToast(`Ошибка удаления: ${err}`, "error");
+      addToast(`Failed to delete: ${err}`, "error");
     }
   }
 
@@ -101,9 +101,9 @@
       </label>
       <label>Target <input bind:value={entry.target} /> <button onclick={() => pick("target")}>Browse</button></label>
       <label>Args <input bind:value={entry.args} placeholder={'-windowed --profile "My Profile"'} /></label>
-      <label>Work dir <input bind:value={entry.work_dir} placeholder="(папка exe)" /> <button onclick={() => pick("work_dir")}>Browse</button></label>
-      <label title="Имя процесса игры, если она запускается через лаунчер (Steam, Epic, .bat). Нужно для подсчёта времени.">
-        Track process <input bind:value={entry.track_process} placeholder="game.exe (для Steam/Epic/лаунчеров)" />
+      <label>Work dir <input bind:value={entry.work_dir} placeholder="(exe folder)" /> <button onclick={() => pick("work_dir")}>Browse</button></label>
+      <label title="Game process name, if it starts through a launcher (Steam, Epic, .bat). Needed for playtime tracking.">
+        Track process <input bind:value={entry.track_process} placeholder="game.exe (for Steam/Epic/launchers)" />
       </label>
       <label>Cover <input bind:value={entry.cover} /> <button onclick={() => pick("cover")}>Browse</button></label>
       <label>Background <input bind:value={entry.background} /> <button onclick={() => pick("background")}>Browse</button></label>
@@ -112,7 +112,7 @@
         <input type="color" value={entry.accent ?? "#4fc3f7"} oninput={(e) => { if (entry) entry.accent = (e.target as HTMLInputElement).value; }} />
         {#if entry.accent}<button onclick={() => { if (entry) entry.accent = null; }}>Clear</button>{/if}
       </label>
-      <label>Category <input bind:value={entry.category} placeholder="Игры, Приложения, Эмуляторы..." /></label>
+      <label>Category <input bind:value={entry.category} placeholder="Games, Apps, Emulators..." /></label>
       <label>Tags (comma) <input value={entry.tags.join(", ")} oninput={(e) => setTags((e.target as HTMLInputElement).value)} /></label>
     </div>
     {#if entry.cover}
@@ -128,7 +128,7 @@
 </div>
 {:else if notFound}
 <div class="editor">
-  <p>Запись не найдена.</p>
+  <p>Entry not found.</p>
   <button onclick={() => goto("/library")}>← Library</button>
 </div>
 {/if}

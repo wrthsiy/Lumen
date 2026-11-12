@@ -8,10 +8,10 @@
   let { open = $bindable(false), onClose = () => {} }: { open?: boolean; onClose?: () => void } = $props();
 
   let items = $derived([
-    `Сменить тему (${$activeTheme?.name ?? "—"})`,
-    `Режим производительности: ${$settings?.performance_mode ? "вкл" : "выкл"}`,
-    "Свернуть в трей",
-    "Закрыть лаунчер",
+    `Switch theme (${$activeTheme?.name ?? "—"})`,
+    `Performance mode: ${$settings?.performance_mode ? "on" : "off"}`,
+    "Minimize to tray",
+    "Quit Lumen",
   ]);
   let idx = $state(0);
 
@@ -33,7 +33,7 @@
         settings.set(next);
         await api.saveSettings(next);
       }
-      addToast(`Тема: ${t.name}`);
+      addToast(`Theme: ${t.name}`);
     } else if (i === 1) {
       const s = $settings;
       if (s) {
@@ -54,7 +54,7 @@
   async function activate(i: number) {
     idx = i;
     playSound("confirm");
-    try { await run(i); } catch (e) { addToast(`Ошибка: ${e}`, "error"); }
+    try { await run(i); } catch (e) { addToast(`Error: ${e}`, "error"); }
     // Theme / performance toggles keep the menu open so you can cycle quickly.
     if (i >= 2) onClose();
   }
@@ -74,11 +74,11 @@
 {#if open}
   <div class="overlay" onclick={(e) => { if (e.target === e.currentTarget) onClose(); }} role="presentation">
     <div class="menu" role="menu">
-      <h3>Быстрое меню</h3>
+      <h3>Quick menu</h3>
       {#each items as it, i (i)}
         <button class="item" class:sel={i === idx} role="menuitem" onclick={() => activate(i)}>{it}</button>
       {/each}
-      {#if $settings?.hotkey}<p class="hint">Вернуться: {$settings.hotkey}</p>{/if}
+      {#if $settings?.hotkey}<p class="hint">Bring back: {$settings.hotkey}</p>{/if}
     </div>
   </div>
 {/if}

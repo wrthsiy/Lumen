@@ -36,10 +36,10 @@
       cats.get(k)!.push(e);
     }
     const result: { title: string; items: Entry[] }[] = [];
-    result.push({ title: "Недавние", items: recent.slice(0, 12) });
-    if (favs.length) result.push({ title: "Избранное", items: favs });
-    result.push({ title: "Игры", items: games });
-    if (apps.length) result.push({ title: "Приложения", items: apps });
+    result.push({ title: "Recent", items: recent.slice(0, 12) });
+    if (favs.length) result.push({ title: "Favorites", items: favs });
+    result.push({ title: "Games", items: games });
+    if (apps.length) result.push({ title: "Apps", items: apps });
     for (const [k, v] of cats) result.push({ title: k, items: v });
     return result.filter((r) => r.items.length > 0);
   });
@@ -178,7 +178,7 @@
         <h2 class="row-title">
           {currentRow.title}
           {#if rows.length > 1}<span class="row-pos">{Math.min($rowIndex, rows.length - 1) + 1}/{rows.length}</span>{/if}
-          {#if $searchQuery}<span class="row-pos">«{$searchQuery}»</span>{/if}
+          {#if $searchQuery}<span class="row-pos">“{$searchQuery}”</span>{/if}
         </h2>
         <Carousel
           items={currentRow.items}
@@ -192,7 +192,7 @@
           }}
         />
       {:else if $searchQuery}
-        <p class="empty">Ничего не найдено по запросу «{$searchQuery}». Esc — сбросить.</p>
+        <p class="empty">Nothing found for “{$searchQuery}”. Press Esc to clear.</p>
       {/if}
     </div>
 
@@ -200,38 +200,38 @@
       {#if sel}
         <h1 class="game-title">{sel.name}</h1>
         <div class="buttons">
-          <button class="btn play" onclick={launchSelected} disabled={$launching}>Играть</button>
-          <button class="btn opt" onclick={() => (optionsOpen = true)}>Опции</button>
+          <button class="btn play" onclick={launchSelected} disabled={$launching}>Play</button>
+          <button class="btn opt" onclick={() => (optionsOpen = true)}>Options</button>
         </div>
         <div class="stats">
-          <span>Запусков: {sel.stats.launches}</span>
-          <span>Время: {formatDuration(sel.stats.playtime_sec)}</span>
-          <span>Последний: {sel.stats.last_played ? new Date(sel.stats.last_played).toLocaleString("ru-RU") : "—"}</span>
+          <span>Launches: {sel.stats.launches}</span>
+          <span>Playtime: {formatDuration(sel.stats.playtime_sec)}</span>
+          <span>Last played: {sel.stats.last_played ? new Date(sel.stats.last_played).toLocaleString("en-US") : "—"}</span>
         </div>
         <div class="meta">
           {#if sel.category}<span class="chip">{sel.category}</span>{/if}
-          {#each sel.tags as t (t)}<span class="chip">{t === "favorite" ? "★ избранное" : t}</span>{/each}
+          {#each sel.tags as t (t)}<span class="chip">{t === "favorite" ? "★ favorite" : t}</span>{/each}
         </div>
       {:else}
         <h1 class="game-title">Lumen</h1>
-        <p class="empty">Нет игр. Добавьте приложения в Библиотеке.</p>
+        <p class="empty">No games yet. Add some in the Library.</p>
       {/if}
     </div>
   </div>
 
   <div class="hints">
     {#if $inputDevice === "gamepad"}
-      <span>✥ навигация</span>
-      <span>A запуск</span>
-      <span>Start опции</span>
-      <span>X поиск</span>
-      <span>Select быстрое меню</span>
+      <span>✥ Navigate</span>
+      <span>A Play</span>
+      <span>Start Options</span>
+      <span>X Search</span>
+      <span>Select Quick menu</span>
     {:else}
-      <span>↑↓←→ навигация</span>
-      <span>Enter запуск</span>
-      <span>Tab опции</span>
-      <span>/ поиск</span>
-      <span>M быстрое меню</span>
+      <span>↑↓←→ Navigate</span>
+      <span>Enter Play</span>
+      <span>Tab Options</span>
+      <span>/ Search</span>
+      <span>M Quick menu</span>
     {/if}
   </div>
 </div>
@@ -241,7 +241,7 @@
     <div class="search-box">
       <input
         class="search-input"
-        placeholder="Поиск по названию, категории, тегу..."
+        placeholder="Search by name, category or tag..."
         bind:value={$searchQuery}
         use:focusOnMount
         onkeydown={(e) => { if (e.key === "Enter") { e.preventDefault(); searchMode = false; } }}
@@ -251,7 +251,7 @@
         onBackspace={() => searchQuery.update((q) => q.slice(0, -1))}
         onConfirm={() => (searchMode = false)}
       />
-      <button class="btn" onclick={() => (searchMode = false)}>Готово</button>
+      <button class="btn" onclick={() => (searchMode = false)}>Done</button>
     </div>
   </div>
 {/if}

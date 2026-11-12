@@ -33,15 +33,15 @@
         entries.set(ens);
         if (ens.length) selectedId.update((cur) => cur ?? ens[0].id);
       } catch (e) {
-        addToast(`Ошибка загрузки данных: ${e}`, "error", 6000);
+        addToast(`Failed to load data: ${e}`, "error", 6000);
       }
 
       const u = await onEntryClosed(async ({ id, session_sec }) => {
         launching.set(false);
         entries.set(await api.listEntries());
         if (session_sec > 0) {
-          const name = $entries.find((x) => x.id === id)?.name ?? "Игра";
-          addToast(`${name}: сессия ${formatDuration(session_sec)}`, "info", 5000);
+          const name = $entries.find((x) => x.id === id)?.name ?? "Game";
+          addToast(`${name}: played ${formatDuration(session_sec)}`, "info", 5000);
         }
       });
       if (disposed) u(); else unlisten = u;

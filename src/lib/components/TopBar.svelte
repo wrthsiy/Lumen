@@ -4,11 +4,11 @@
   let { onActivate }: { onActivate: (index: number) => void } = $props();
 
   const items = [
-    { id: "search", label: "Поиск", icon: "search" },
-    { id: "library", label: "Библиотека", icon: "library" },
-    { id: "themes", label: "Темы", icon: "theme" },
-    { id: "settings", label: "Настройки", icon: "settings" },
-    { id: "power", label: "Питание", icon: "power" },
+    { id: "search", label: "Search", icon: "search" },
+    { id: "library", label: "Library", icon: "library" },
+    { id: "themes", label: "Themes", icon: "theme" },
+    { id: "settings", label: "Settings", icon: "settings" },
+    { id: "power", label: "Power", icon: "power" },
   ];
 
   let now = $state(new Date());
@@ -49,7 +49,7 @@
     {/each}
   </div>
   <div class="right">
-    <span class="clock">{now.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}</span>
+    <span class="clock">{now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</span>
     <div class="avatar">
       <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
     </div>

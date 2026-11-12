@@ -49,6 +49,6 @@ export async function launchEntryAnimated(id: string, delayMs = 500) {
     await api.launchEntry(id);
   } catch (e) {
     launching.set(false);
-    addToast(`Не удалось запустить: ${e}`, "error", 5000);
+    addToast(`Failed to launch: ${e}`, "error", 5000);
   }
 }

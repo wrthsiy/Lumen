@@ -13,21 +13,21 @@
   let isFav = $derived($selectedEntry?.tags.includes("favorite") ?? false);
 
   let actions = $derived([
-    { label: "Запустить", run: async () => { if ($selectedEntry) launchEntryAnimated($selectedEntry.id); } },
-    { label: "Свойства", run: async () => { if ($selectedEntry) goto(`/editor/${$selectedEntry.id}`); } },
+    { label: "Play", run: async () => { if ($selectedEntry) launchEntryAnimated($selectedEntry.id); } },
+    { label: "Properties", run: async () => { if ($selectedEntry) goto(`/editor/${$selectedEntry.id}`); } },
     {
-      label: isFav ? "Убрать из избранного" : "Добавить в избранное",
+      label: isFav ? "Remove from favorites" : "Add to favorites",
       run: async () => {
         const e = $selectedEntry;
         if (!e) return;
         const tags = isFav ? e.tags.filter((t) => t !== "favorite") : [...e.tags, "favorite"];
         const saved = await api.saveEntry({ ...e, tags });
         entries.update((a) => a.map((x) => (x.id === saved.id ? saved : x)));
-        addToast(isFav ? "Убрано из избранного" : "Добавлено в избранное", "success");
+        addToast(isFav ? "Removed from favorites" : "Added to favorites", "success");
       },
     },
     {
-      label: confirmDelete ? "Точно удалить? (ещё раз)" : "Удалить из библиотеки",
+      label: confirmDelete ? "Really remove? (press again)" : "Remove from library",
       keepOpen: !confirmDelete,
       run: async () => {
         // Two-step confirm: the first press only arms the action.
@@ -36,7 +36,7 @@
         if (!e) return;
         await api.deleteEntry(e.id);
         entries.update((a) => a.filter((x) => x.id !== e.id));
-        addToast(`«${e.name}» удалено`);
+        addToast(`“${e.name}” removed`);
       },
     },
   ]);
@@ -53,7 +53,7 @@
     try {
       await a.run();
     } catch (e) {
-      addToast(`Ошибка: ${e}`, "error");
+      addToast(`Error: ${e}`, "error");
     }
     if (!("keepOpen" in a && a.keepOpen)) onClose();
   }
@@ -74,7 +74,7 @@
   <div class="backdrop" onclick={onClose} role="presentation"></div>
   <div class="panel" role="menu">
     <div class="panel-inner">
-      <h3>{$selectedEntry?.name ?? "Опции"}</h3>
+      <h3>{$selectedEntry?.name ?? "Options"}</h3>
       {#each actions as a, i (i)}
         <button class="item" class:sel={i === idx} class:danger={i === 3 && confirmDelete} role="menuitem" onclick={() => activate(i)}>
           {a.label}

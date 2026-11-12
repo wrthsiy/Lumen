@@ -25,7 +25,7 @@
     try {
       await api.saveSettings(snapshot);
     } catch (e) {
-      addToast(`Не удалось сохранить: ${e}`, "error", 5000);
+      addToast(`Failed to save: ${e}`, "error", 5000);
       return;
     }
     settingsStore.set(snapshot);
@@ -37,7 +37,7 @@
       await w.setFullscreen(snapshot.fullscreen);
       await w.setAlwaysOnTop(snapshot.always_on_top);
     } catch {}
-    addToast("Настройки сохранены", "success");
+    addToast("Settings saved", "success");
     goto("/");
   }
 </script>
@@ -52,8 +52,8 @@
     <label><input type="checkbox" bind:checked={s.fullscreen} /> Fullscreen</label>
     <label><input type="checkbox" bind:checked={s.always_on_top} /> Always on top</label>
     <label><input type="checkbox" bind:checked={s.performance_mode} /> Performance mode</label>
-    <label class="muted" title="Пока не реализовано"><input type="checkbox" disabled bind:checked={s.autostart} /> Autostart (скоро)</label>
-    <label>Hotkey (вернуть лаунчер) <input bind:value={s.hotkey} placeholder="Ctrl+Shift+L" /></label>
+    <label class="muted" title="Not implemented yet"><input type="checkbox" disabled bind:checked={s.autostart} /> Autostart (coming soon)</label>
+    <label>Hotkey (bring Lumen back) <input bind:value={s.hotkey} placeholder="Ctrl+Shift+L" /></label>
     <label>Layout
       <select bind:value={s.layout}>
         <option value="rows">Rows</option>
@@ -61,7 +61,7 @@
         <option value="xmb">XMB</option>
       </select>
     </label>
-    <label>Режим анимации
+    <label>Animation mode
       <select bind:value={s.animation.mode}>
         {#each modeNames as m (m)}
           <option value={m}>{m}</option>
@@ -69,8 +69,8 @@
       </select>
     </label>
     {#if previewSettings}<ModePreview mode={s.animation.mode} animSettings={previewSettings} />{/if}
-    <label>Скорость <input type="range" min="0.5" max="2" step="0.1" bind:value={s.animation.speed} /> {s.animation.speed}</label>
-    <label>Интенсивность <input type="range" min="0" max="1" step="0.05" bind:value={s.animation.intensity} /> {s.animation.intensity}</label>
+    <label>Speed <input type="range" min="0.5" max="2" step="0.1" bind:value={s.animation.speed} /> {s.animation.speed}</label>
+    <label>Intensity <input type="range" min="0" max="1" step="0.05" bind:value={s.animation.intensity} /> {s.animation.intensity}</label>
     <label>Easing
       <select bind:value={s.animation.easing}>
         <option value="spring">Spring</option>
@@ -78,17 +78,17 @@
         <option value="linear">Linear</option>
       </select>
     </label>
-    <label><input type="checkbox" bind:checked={s.animation.parallax} /> Параллакс</label>
-    <label><input type="checkbox" bind:checked={s.animation.tilt} /> 3D-наклон</label>
-    <label><input type="checkbox" bind:checked={s.animation.glow} /> Свечение</label>
-    <label><input type="checkbox" bind:checked={s.animation.reflection} /> Отражение</label>
-    <label><input type="checkbox" bind:checked={s.animation.reduced_motion} /> Уменьшить движение</label>
-    <label>Тема
+    <label><input type="checkbox" bind:checked={s.animation.parallax} /> Parallax</label>
+    <label><input type="checkbox" bind:checked={s.animation.tilt} /> 3D tilt</label>
+    <label><input type="checkbox" bind:checked={s.animation.glow} /> Glow</label>
+    <label><input type="checkbox" bind:checked={s.animation.reflection} /> Reflection</label>
+    <label><input type="checkbox" bind:checked={s.animation.reduced_motion} /> Reduce motion</label>
+    <label>Theme
       <select bind:value={s.active_theme}>
         {#each $themes as t (t.name)}<option value={t.name}>{t.name}</option>{/each}
       </select>
     </label>
-    {#if dataDir}<p class="muted">Данные: {dataDir}</p>{/if}
+    {#if dataDir}<p class="muted">Data folder: {dataDir}</p>{/if}
   </div>
   <button onclick={save}>Save</button>
 </div>

@@ -55,23 +55,23 @@
         settings.set(next);
         await api.saveSettings(next);
       }
-      addToast(`Тема «${t.name}» сохранена и применена`, "success");
+      addToast(`Theme “${t.name}” saved and applied`, "success");
     } catch (e) {
-      addToast(`Ошибка сохранения: ${e}`, "error", 5000);
+      addToast(`Failed to save: ${e}`, "error", 5000);
     }
   }
 
   async function remove() {
     if (!originalName) return;
-    if (!confirm(`Удалить тему «${originalName}»?`)) return;
+    if (!confirm(`Delete theme “${originalName}”?`)) return;
     try {
       await api.deleteTheme(originalName);
       await refresh();
       if ($activeTheme?.name === originalName) activeTheme.set($themes[0] ?? null);
       edit($activeTheme);
-      addToast("Тема удалена");
+      addToast("Theme deleted");
     } catch (e) {
-      addToast(`Ошибка: ${e}`, "error");
+      addToast(`Error: ${e}`, "error");
     }
   }
 
@@ -97,7 +97,7 @@
   function duplicate() {
     if (!theme) return;
     const copy = structuredClone($state.snapshot(theme) as Theme);
-    copy.name = `${copy.name} (копия)`;
+    copy.name = `${copy.name} (copy)`;
     theme = copy;
     originalName = null;
   }
@@ -144,14 +144,14 @@
     <label><input type="checkbox" bind:checked={theme.tile.glow} /> Tile glow</label>
     <label>Tile size <input type="number" bind:value={theme.tile.size} /></label>
     <label>Sound volume <input type="range" min="0" max="1" step="0.05" bind:value={theme.sounds.volume} /> {theme.sounds.volume}</label>
-    <label>Режим анимации
+    <label>Animation mode
       <select bind:value={theme.animation.mode}>
         {#each modeNames as m (m)}<option value={m}>{m}</option>{/each}
       </select>
     </label>
     {#if previewSettings}<ModePreview mode={theme.animation.mode} animSettings={previewSettings} />{/if}
-    <label>Скорость <input type="range" min="0.5" max="2" step="0.1" bind:value={theme.animation.speed} /> {theme.animation.speed}</label>
-    <label>Интенсивность <input type="range" min="0" max="1" step="0.05" bind:value={theme.animation.intensity} /> {theme.animation.intensity}</label>
+    <label>Speed <input type="range" min="0.5" max="2" step="0.1" bind:value={theme.animation.speed} /> {theme.animation.speed}</label>
+    <label>Intensity <input type="range" min="0" max="1" step="0.05" bind:value={theme.animation.intensity} /> {theme.animation.intensity}</label>
     <label>Easing
       <select bind:value={theme.animation.easing}>
         <option value="spring">Spring</option>
@@ -159,11 +159,11 @@
         <option value="linear">Linear</option>
       </select>
     </label>
-    <label><input type="checkbox" bind:checked={theme.animation.parallax} /> Параллакс</label>
-    <label><input type="checkbox" bind:checked={theme.animation.tilt} /> 3D-наклон</label>
-    <label><input type="checkbox" bind:checked={theme.animation.glow} /> Свечение</label>
-    <label><input type="checkbox" bind:checked={theme.animation.reflection} /> Отражение</label>
-    <label><input type="checkbox" bind:checked={theme.animation.reduced_motion} /> Уменьшить движение</label>
+    <label><input type="checkbox" bind:checked={theme.animation.parallax} /> Parallax</label>
+    <label><input type="checkbox" bind:checked={theme.animation.tilt} /> 3D tilt</label>
+    <label><input type="checkbox" bind:checked={theme.animation.glow} /> Glow</label>
+    <label><input type="checkbox" bind:checked={theme.animation.reflection} /> Reflection</label>
+    <label><input type="checkbox" bind:checked={theme.animation.reduced_motion} /> Reduce motion</label>
     <label>Custom CSS <textarea bind:value={theme.custom_css} rows="6"></textarea></label>
   </div>
 
