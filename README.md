@@ -42,6 +42,27 @@ npm run tauri build    # installer in src-tauri/target/release/bundle
 
 Rust unit tests: `cd src-tauri && cargo test --lib`.
 
+## Releases
+
+Releases are built automatically by GitHub Actions
+([`.github/workflows/release.yml`](.github/workflows/release.yml)).
+To publish a new version, push a tag:
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+The workflow type-checks, runs tests, builds the Windows installers (`.exe`
+NSIS setup and `.msi`) and attaches them to a GitHub Release named after the
+tag. The tag's version is used for the build, so you don't need to edit
+`tauri.conf.json` by hand. Tags with a suffix (e.g. `v0.2.0-beta.1`) are
+published as pre-releases. You can also start a release by hand from the
+**Actions** tab ("Run workflow"); it uses the version in `tauri.conf.json`.
+
+Every push to `main` and every pull request also runs the CI workflow
+(type check, frontend build, Rust check and tests).
+
 ## Data
 
 Stored in `%APPDATA%\com.lumen.launcher\`:
